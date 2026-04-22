@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASEN PASSPORT — Leather Traceability</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&family=Caveat:wght@400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#B8860B;--gold-light:#D4A843;--dark:#1A1A2E;--ink:#1a1410;
+  --muted:#7a6e65;--border:#e0d8d0;--surface:#f5f0eb;--cream:#FAF7F2;
+}
+html{scroll-behavior:smooth}
+body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:4px;background:var(--cream)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+/* ── NAVIGATION ── */
+.top-bar{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 32px;
+  background:rgba(26,26,46,.97);backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.top-logo{font-family:'DM Serif Display',serif;font-size:16px;color:#fff;letter-spacing:.02em}
+.top-logo span{color:var(--gold)}
+.top-nav{display:flex;gap:6px}
+.top-nav button{
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  padding:7px 16px;border-radius:4px;cursor:pointer;transition:all .2s;border:1px solid transparent;
+}
+.nav-track{background:transparent;color:#ccc}
+.nav-track:hover,.nav-track.active{color:#fff;background:rgba(255,255,255,.08)}
+.nav-portal{background:var(--gold);color:#fff;border-color:var(--gold)}
+.nav-portal:hover{background:#9a700a}
+
+/* ── HERO / LANDING ── */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:120px 24px 80px;position:relative;
+  background:var(--dark);overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 30%, rgba(184,134,11,.08) 0%, transparent 60%),
+             radial-gradient(ellipse at 80% 70%, rgba(184,134,11,.04) 0%, transparent 50%);
+}
+.hero>*{position:relative;z-index:1}
+
+.hero-eyebrow{
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:32px;
+  display:flex;align-items:center;gap:12px;
+}
+.hero-eyebrow::before,.hero-eyebrow::after{
+  content:'';width:40px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+.hero-title{
+  font-family:'DM Serif Display',serif;font-size:clamp(48px,8vw,80px);
+  color:#fff;line-height:1;margin-bottom:16px;letter-spacing:-.02em;
+}
+.hero-sub{
+  font-family:'DM Mono',monospace;font-size:11px;color:#888780;letter-spacing:.06em;margin-bottom:48px;
+}
+.hero-sub span{color:var(--gold);margin:0 8px}
+
+/* ── HANDWRITTEN MANIFESTO ── */
+.manifesto{
+  max-width:600px;margin:0 auto 56px;
+  padding:40px 36px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(184,134,11,.15);
+  border-radius:12px;
+  position:relative;
+}
+.manifesto::before{
+  content:'"';position:absolute;top:-8px;left:24px;
+  font-family:'DM Serif Display',serif;font-size:64px;color:var(--gold);opacity:.3;line-height:1;
+}
+.manifesto p{
+  font-family:'Caveat',cursive;font-size:22px;line-height:1.65;
+  color:rgba(255,255,255,.82);font-weight:400;
+}
+.manifesto p strong{color:var(--gold-light);font-weight:600}
+.manifesto-sign{
+  margin-top:20px;text-align:right;
+  font-family:'DM Mono',monospace;font-size:10px;color:#666;letter-spacing:.08em;
+}
+
+/* ── TRACK SECTION ── */
+.track-section{
+  padding:0 24px 80px;text-align:center;
+}
+.track-label{
+  font-family:'DM Serif Display',serif;font-size:24px;color:#fff;margin-bottom:8px;
+}
+.track-desc{
+  font-family:'DM Mono',monospace;font-size:11px;color:#888780;letter-spacing:.03em;margin-bottom:24px;
+}
+.search-wrap{
+  display:flex;gap:0;max-width:440px;margin:0 auto;
+  border:1.5px solid rgba(184,134,11,.4);border-radius:8px;overflow:hidden;
+  transition:border-color .3s;
+}
+.search-wrap:focus-within{border-color:var(--gold)}
+.search-wrap input{
+  flex:1;background:rgba(255,255,255,.04);border:none;padding:14px 18px;
+  font-family:'DM Mono',monospace;font-size:14px;color:#fff;outline:none;letter-spacing:.04em;
+}
+.search-wrap input::placeholder{color:#555}
+.search-wrap button{
+  background:var(--gold);border:none;padding:0 28px;
+  font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:#fff;
+  cursor:pointer;letter-spacing:.06em;transition:background .2s;
+}
+.search-wrap button:hover{background:#9a700a}
+.track-hint{
+  font-family:'DM Mono',monospace;font-size:10px;color:#555;margin-top:12px;letter-spacing:.04em;
+}
+
+/* ── PASSPORT RESULT (same as v6) ── */
+.passport-body{padding:0 0 2rem;background:var(--cream)}
+.ps{padding:1.2rem 1.6rem;border-bottom:1px solid var(--border)}
+.ps:last-child{border-bottom:none}
+.ps-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem}
+.id-table{width:100%;border-collapse:collapse}
+.id-table tr{border-bottom:1px solid var(--border)}
+.id-table tr:last-child{border-bottom:none}
+.id-table td{padding:8px 0;vertical-align:top}
+.id-table .k{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);width:160px;padding-right:16px}
+.id-table .v{font-family:'DM Mono',monospace;font-size:13px;color:var(--ink);font-weight:500}
+.color-dot{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:middle;border:1px solid rgba(0,0,0,.15)}
+.origin-region{border-radius:6px 6px 0 0;padding:.65rem 1rem;display:flex;gap:12px;align-items:center}
+.origin-region .ok{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;width:80px}
+.origin-region .ov{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500}
+.origin-country{border:1px solid var(--border);border-top:none;border-radius:0 0 6px 6px;padding:.65rem 1rem;display:flex;align-items:center;gap:12px}
+.origin-country .ok{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);width:80px}
+.origin-country .ov{font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);font-weight:500}
+.origin-country .code{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-left:auto;background:var(--surface);padding:2px 8px;border-radius:4px}
+.map-box{background:var(--surface);border-radius:6px;overflow:hidden;margin-top:.8rem;width:100%}
+.map-box svg{display:block;width:100%;height:auto}
+.map-caption{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);text-align:center;margin-top:6px;letter-spacing:.05em}
+.origin-info{
+  margin-top:.8rem;margin-bottom:.2rem;padding:14px 16px;background:var(--surface);border-radius:6px;
+  border-left:3px solid var(--gold);
+  font-family:'DM Sans',sans-serif;font-size:12px;color:var(--muted);line-height:1.7;
+}
+.origin-info strong{color:var(--ink);font-weight:600}
+.carbon-score-row{display:flex;align-items:center;gap:1.2rem;margin-bottom:1rem}
+.carbon-score-num{font-family:'DM Serif Display',serif;font-size:48px;color:var(--dark);line-height:1}
+.carbon-score-unit{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);line-height:1.5}
+.carbon-score-badge{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;background:#EAF3DE;color:#27500A;padding:3px 10px;border-radius:4px;display:inline-block;margin-top:6px}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:3px}
+.bar-row-wrap{margin-bottom:12px}
+.bar-desc{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-left:165px;line-height:1.5;opacity:.75}
+.bar-lbl{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);width:155px;text-align:right;flex-shrink:0;line-height:1.3}
+.bar-track{flex:1;background:var(--surface);border-radius:3px;height:24px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding:0 8px}
+.bar-fill span{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;white-space:nowrap}
+.meth-table,.chem-table{width:100%;border-collapse:collapse}
+.meth-table tr,.chem-table tr{border-bottom:1px solid var(--border)}
+.meth-table tr:last-child,.chem-table tr:last-child{border-bottom:none}
+.meth-table td,.chem-table td{padding:7px 0;vertical-align:top}
+.mk,.ck{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);width:150px;padding-right:12px}
+.mv{font-family:'DM Mono',monospace;font-size:12px;color:var(--ink);font-weight:500}
+.ms{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);text-align:right}
+.cv{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--ink);font-weight:500}
+.csub{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:2px}
+.chip{display:inline-block;font-family:'DM Mono',monospace;font-size:10px;padding:2px 8px;border-radius:4px;margin:2px 2px 0 0;font-weight:500}
+.chip-g{background:#EAF3DE;color:#27500A}
+.chip-b{background:#E6F1FB;color:#0C447C}
+.carbon-note{
+  margin-top:1rem;padding:12px 16px;background:var(--surface);border-radius:6px;
+  border-left:3px solid var(--gold);
+  font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);line-height:1.7;
+}
+.carbon-note strong{color:var(--ink)}
+.passport-footer{background:var(--dark);padding:1rem 1.6rem;text-align:center}
+.passport-footer p{font-family:'DM Mono',monospace;font-size:10px;color:#555;letter-spacing:.05em;line-height:1.7}
+.loading-state{padding:2rem;text-align:center;font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);background:var(--cream)}
+.error-state{padding:1rem 1.6rem;font-family:'DM Mono',monospace;font-size:12px;color:#c0392b;background:#fadbd8;border-radius:6px;margin:1rem 1.6rem}
+
+/* ── CUSTOMER PORTAL ── */
+.portal-overlay{
+  display:none;position:fixed;inset:0;z-index:300;
+  background:rgba(26,26,46,.92);backdrop-filter:blur(8px);
+  justify-content:center;align-items:center;
+}
+.portal-overlay.open{display:flex}
+
+/* Login card */
+.portal-login{
+  background:var(--cream);border-radius:12px;padding:48px 40px;
+  width:90%;max-width:420px;text-align:center;position:relative;
+}
+.portal-close{
+  position:absolute;top:16px;right:16px;background:none;border:none;
+  font-size:20px;color:var(--muted);cursor:pointer;line-height:1;
+}
+.portal-logo{font-family:'DM Serif Display',serif;font-size:22px;color:var(--dark);margin-bottom:4px}
+.portal-logo span{color:var(--gold)}
+.portal-subtitle{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:32px}
+.portal-field{
+  width:100%;padding:12px 16px;margin-bottom:12px;
+  border:1.5px solid var(--border);border-radius:6px;background:#fff;
+  font-family:'DM Mono',monospace;font-size:13px;color:var(--ink);outline:none;
+  transition:border-color .2s;
+}
+.portal-field:focus{border-color:var(--gold)}
+.portal-field::placeholder{color:#bbb}
+.portal-btn{
+  width:100%;padding:14px;margin-top:8px;
+  background:var(--dark);color:#fff;border:none;border-radius:6px;
+  font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+  cursor:pointer;transition:background .2s;
+}
+.portal-btn:hover{background:#2a2a4e}
+.portal-error{font-family:'DM Mono',monospace;font-size:11px;color:#c0392b;margin-top:8px;display:none}
+
+/* Dashboard */
+.portal-dashboard{
+  display:none;background:var(--cream);min-height:100vh;padding-top:60px;
+}
+.dash-header{
+  background:var(--dark);padding:48px 32px 32px;text-align:center;
+}
+.dash-welcome{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.dash-customer{font-family:'DM Serif Display',serif;font-size:36px;color:#fff;margin-bottom:4px}
+.dash-sub{font-family:'DM Mono',monospace;font-size:11px;color:#888780;letter-spacing:.04em}
+.dash-welcome-msg{
+  max-width:600px;margin:20px auto 0;
+  font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.7;
+  color:rgba(255,255,255,.55);text-align:center;
+}
+.dash-logout{
+  position:absolute;top:72px;right:32px;
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:#888780;background:none;border:1px solid rgba(255,255,255,.1);
+  padding:6px 14px;border-radius:4px;cursor:pointer;
+}
+.dash-logout:hover{color:#fff;border-color:rgba(255,255,255,.25)}
+
+.dash-stats{
+  display:flex;gap:1px;background:rgba(255,255,255,.06);
+  margin-top:24px;border-radius:8px;overflow:hidden;max-width:500px;margin-left:auto;margin-right:auto;
+}
+.dash-stat{
+  flex:1;padding:16px;text-align:center;background:rgba(26,26,46,.6);
+}
+.dash-stat-num{font-family:'DM Serif Display',serif;font-size:28px;color:#fff}
+.dash-stat-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#888780;margin-top:4px}
+
+.dash-body{padding:24px 32px;max-width:900px;margin:0 auto}
+.dash-table-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.dash-search-wrap{margin-bottom:16px}
+.dash-search{
+  width:100%;padding:11px 16px;
+  border:1.5px solid var(--border);border-radius:6px;background:#fff;
+  font-family:'DM Mono',monospace;font-size:12px;color:var(--ink);outline:none;
+  transition:border-color .2s;letter-spacing:.03em;
+}
+.dash-search:focus{border-color:var(--gold)}
+.dash-search::placeholder{color:#bbb}
+
+.lot-table{width:100%;border-collapse:collapse}
+.lot-table thead th{
+  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);padding:10px 12px;text-align:left;border-bottom:2px solid var(--border);
+}
+.lot-table tbody tr{
+  border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;
+}
+.lot-table tbody tr:hover{background:rgba(184,134,11,.06)}
+.lot-table tbody td{
+  padding:12px;font-family:'DM Mono',monospace;font-size:12px;color:var(--ink);
+}
+.lot-table .lot-code{font-weight:500;color:var(--dark)}
+.lot-table .lot-arrow{text-align:right;color:var(--gold);font-size:14px}
+
+/* ── BACK BUTTON ── */
+.back-bar{
+  display:none;padding:12px 24px;background:var(--surface);border-bottom:1px solid var(--border);
+}
+.back-btn{
+  font-family:'DM Mono',monospace;font-size:11px;color:var(--gold);
+  background:none;border:none;cursor:pointer;letter-spacing:.04em;
+}
+.back-btn:hover{text-decoration:underline}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  .top-bar{padding:12px 16px}
+  .hero{padding:100px 20px 60px}
+  .manifesto{padding:28px 24px}
+  .manifesto p{font-size:19px}
+  .search-wrap{flex-direction:column}
+  .search-wrap button{padding:12px}
+  .dash-header{padding:36px 20px 24px}
+  .dash-body{padding:16px}
+  .dash-stats{flex-direction:column}
+  .bar-lbl{width:100px;font-size:9px}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<div class="top-bar">
+  <div class="top-logo">ASEN <span>PASSPORT</span></div>
+  <div class="top-nav">
+    <button class="nav-track active" onclick="showHome()">Track</button>
+    <button class="nav-portal" onclick="openPortal()">Customer Portal</button>
+  </div>
+</div>
+
+<!-- HERO + LANDING -->
+<div id="home-view">
+  <div class="hero">
+    <div class="hero-eyebrow">Sustainability · Traceability · Compliance</div>
+    <div class="hero-title">ASEN PASSPORT</div>
+    <div class="hero-sub">Asen Tannery <span>·</span> Deri OSB Istanbul <span>·</span> LWG Gold Certified</div>
+
+    <div class="manifesto">
+      <p>
+        Every piece of leather has a story — <strong>where it came from</strong>, 
+        how it was made, and what it cost the planet.<br><br>
+        We believe the brands we work with deserve to <strong>see that story</strong>. 
+        Not as a marketing claim, but as verifiable data — origin, carbon footprint, 
+        chemical compliance — all tied to a single tracking code 
+        stamped on every hide that leaves our tannery.<br><br>
+        <strong>Asen Passport</strong> is our commitment to full transparency. 
+        We are among the first tanneries in the world to offer 
+        lot-level traceability with real environmental data to our partners.
+      </p>
+      <div class="manifesto-sign">— Asen Tannery, Istanbul · Since 1982</div>
+    </div>
+
+    <div class="track-section">
+      <div class="track-label">Track your leather</div>
+      <div class="track-desc">Enter the tracking code stamped on the back of your leather</div>
+      <div class="search-wrap">
+        <input id="inp" placeholder="e.g. 532-025" onkeydown="if(event.key==='Enter')doTrack()">
+        <button onclick="doTrack()">TRACK ↗</button>
+      </div>
+      <div class="track-hint">The code is printed on the flesh side of every hide · Format: XXX-XXX</div>
+    </div>
+  </div>
+</div>
+
+<!-- PASSPORT RESULT -->
+<div class="back-bar" id="back-bar">
+  <button class="back-btn" onclick="goBack()">← Back</button>
+</div>
+<div id="result"></div>
+
+<!-- CUSTOMER PORTAL OVERLAY -->
+<div class="portal-overlay" id="portal-overlay">
+  <div class="portal-login" id="portal-login-card">
+    <button class="portal-close" onclick="closePortal()">✕</button>
+    <div class="portal-logo">ASEN <span>PASSPORT</span></div>
+    <div class="portal-subtitle">Customer Portal</div>
+    <input class="portal-field" id="portal-user" placeholder="Customer ID" autocomplete="username">
+    <input class="portal-field" id="portal-pass" type="password" placeholder="Password" autocomplete="current-password"
+      onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="portal-btn" onclick="doLogin()">Sign In</button>
+    <div class="portal-error" id="portal-error">Invalid credentials. Please try again.</div>
+  </div>
+</div>
+
+<!-- CUSTOMER DASHBOARD -->
+<div class="portal-dashboard" id="portal-dashboard">
+  <div class="dash-header" style="position:relative">
+    <div class="dash-welcome">Welcome back</div>
+    <div class="dash-customer" id="dash-customer-name"></div>
+    <div class="dash-sub">Your leather supply — full traceability</div>
+    <div class="dash-welcome-msg">Every hide in your supply chain is LWG Gold certified, fully traceable from origin to finished leather, and produced with 59% lower carbon footprint than the industry average. Below you'll find the complete record of your production lots — tap any lot to view its full passport.</div>
+    <button class="dash-logout" onclick="doLogout()">Sign Out</button>
+    <div class="dash-stats" id="dash-stats"></div>
+  </div>
+  <div class="dash-body">
+    <div class="dash-table-title">Your Production Lots</div>
+    <div class="dash-search-wrap">
+      <input class="dash-search" id="dash-search" placeholder="Search by lot code, article or color..." oninput="filterLots()">
+    </div>
+    <table class="lot-table">
+      <thead>
+        <tr>
+          <th>Lot Code</th>
+          <th>Article</th>
+          <th>Color</th>
+          <th>Production Date</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="dash-lots"></tbody>
+    </table>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+const API='https://script.google.com/macros/s/AKfycbz6HhMJOP0Z0l0F5HVTD5T9taxwuoMQ67plwdb8F2C2LWWYPRSDdyLPHpZzc_mXKkk/exec';
+
+// ── STATE ──
+let currentView = 'home'; // home | passport | dashboard
+let cameFrom = 'home'; // where to go back
+
+// ── NAV ──
+function showHome(){
+  document.getElementById('home-view').style.display='';
+  document.getElementById('result').innerHTML='';
+  document.getElementById('back-bar').style.display='none';
+  document.getElementById('portal-dashboard').style.display='none';
+  currentView='home';
+}
+function goBack(){
+  if(cameFrom==='dashboard'){
+    document.getElementById('result').innerHTML='';
+    document.getElementById('back-bar').style.display='none';
+    document.getElementById('portal-dashboard').style.display='block';
+    document.getElementById('home-view').style.display='none';
+    currentView='dashboard';
+  } else {
+    showHome();
+  }
+}
+
+// ── PORTAL ──
+function openPortal(){ document.getElementById('portal-overlay').classList.add('open') }
+function closePortal(){
+  document.getElementById('portal-overlay').classList.remove('open');
+  document.getElementById('portal-error').style.display='none';
+}
+
+let activeCustomer = null;
+let dashLots = []; // stored for filtering
+
+async function doLogin(){
+  const user = document.getElementById('portal-user').value.trim().toLowerCase();
+  const pass = document.getElementById('portal-pass').value.trim();
+  if(!user||!pass) return;
+  const btn = document.querySelector('.portal-btn');
+  btn.textContent='Signing in...';btn.disabled=true;
+  try{
+    const res = await fetch(`${API}?action=portalLogin&user=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}`);
+    const json = await res.json();
+    if(!json.ok){
+      document.getElementById('portal-error').style.display='block';
+      btn.textContent='Sign In';btn.disabled=false;
+      return;
+    }
+    activeCustomer = { name: json.customer, display: json.customer };
+    closePortal();
+    btn.textContent='Sign In';btn.disabled=false;
+    loadDashboard(activeCustomer);
+  }catch(e){
+    document.getElementById('portal-error').style.display='block';
+    btn.textContent='Sign In';btn.disabled=false;
+  }
+}
+
+function doLogout(){
+  activeCustomer=null;
+  showHome();
+}
+
+async function loadDashboard(cust){
+  document.getElementById('home-view').style.display='none';
+  document.getElementById('result').innerHTML='';
+  document.getElementById('back-bar').style.display='none';
+  const dash = document.getElementById('portal-dashboard');
+  dash.style.display='block';
+  document.getElementById('dash-customer-name').textContent = cust.display;
+  currentView='dashboard';
+
+  // Fetch customer lots
+  const tbody = document.getElementById('dash-lots');
+  tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--muted)">Loading your lots...</td></tr>';
+
+  try{
+    const res = await fetch(`${API}?action=getByCustomer&customer=${encodeURIComponent(cust.name)}`);
+    const json = await res.json();
+    if(!json.ok || !json.data || json.data.length===0){
+      tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--muted)">No lots found.</td></tr>';
+      document.getElementById('dash-stats').innerHTML='';
+      return;
+    }
+    const lots = json.data;
+    dashLots = lots;
+
+    // Stats
+    const articles = new Set(lots.map(l=>l.urun)).size;
+    document.getElementById('dash-stats').innerHTML=`
+      <div class="dash-stat"><div class="dash-stat-num">${lots.length}</div><div class="dash-stat-label">Total Lots</div></div>
+      <div class="dash-stat"><div class="dash-stat-num">${articles}</div><div class="dash-stat-label">Articles</div></div>
+      <div class="dash-stat"><div class="dash-stat-num">Gold</div><div class="dash-stat-label">LWG Rating</div></div>
+    `;
+
+    // Clear search and render
+    const searchEl = document.getElementById('dash-search');
+    if(searchEl) searchEl.value='';
+    renderLots(lots);
+  }catch(e){
+    tbody.innerHTML=`<tr><td colspan="5" style="text-align:center;padding:24px;color:#c0392b">Error loading data: ${e.message}</td></tr>`;
+  }
+}
+
+function renderLots(lots){
+  const tbody = document.getElementById('dash-lots');
+  tbody.innerHTML='';
+  if(lots.length===0){
+    tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--muted)">No matching lots found.</td></tr>';
+    return;
+  }
+  lots.forEach(lot=>{
+    const tr = document.createElement('tr');
+    tr.onclick = () => openLotFromDash(lot.isEmri);
+    const renkHex = COLOR_HEX[(lot.renk||'').toLowerCase()]||'#C9A87C';
+    tr.innerHTML=`
+      <td class="lot-code">${lot.isEmri||'—'}</td>
+      <td>${lot.urun||'—'}</td>
+      <td><span class="color-dot" style="background:${renkHex}"></span>${lot.renk||'—'}</td>
+      <td>${fmtDate(lot.tarih)}</td>
+      <td class="lot-arrow">→</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function filterLots(){
+  const q = document.getElementById('dash-search').value.trim().toLowerCase();
+  if(!q){ renderLots(dashLots); return; }
+  const filtered = dashLots.filter(lot=>
+    (lot.isEmri||'').toLowerCase().includes(q) ||
+    (lot.urun||'').toLowerCase().includes(q) ||
+    (lot.renk||'').toLowerCase().includes(q)
+  );
+  renderLots(filtered);
+}
+
+function openLotFromDash(lotCode){
+  cameFrom='dashboard';
+  document.getElementById('portal-dashboard').style.display='none';
+  document.getElementById('back-bar').style.display='block';
+  document.getElementById('result').innerHTML='<div class="loading-state">Loading passport...</div>';
+  currentView='passport';
+  fetchAndBuild(lotCode);
+}
+
+// ── MAIN TRACK ──
+async function doTrack(){
+  const raw=document.getElementById('inp').value.trim();if(!raw)return;
+  cameFrom='home';
+  document.getElementById('home-view').style.display='none';
+  document.getElementById('back-bar').style.display='block';
+  document.getElementById('result').innerHTML='<div class="loading-state">Searching Deri Takip...</div>';
+  currentView='passport';
+  fetchAndBuild(raw);
+}
+
+async function fetchAndBuild(lot){
+  const el=document.getElementById('result');
+  try{
+    const res=await fetch(`${API}?action=getByLot&lot=${encodeURIComponent(lot)}`);
+    const json=await res.json();
+    if(!json.ok){el.innerHTML=`<div class="error-state">Lot code <strong>${lot}</strong> not found.</div>`;return;}
+    buildPage(el,json.data);
+  }catch(e){el.innerHTML=`<div class="error-state">Connection error — ${e.message}</div>`;}
+}
+
+// ── DATA MAPS (from v6) ──
+const CONT_MAP={
+  8:'eu',20:'eu',40:'eu',56:'eu',70:'eu',100:'eu',112:'eu',191:'eu',196:'eu',
+  203:'eu',208:'eu',233:'eu',246:'eu',250:'eu',276:'eu',300:'eu',348:'eu',352:'eu',
+  372:'eu',380:'eu',428:'eu',438:'eu',440:'eu',442:'eu',470:'eu',492:'eu',498:'eu',
+  499:'eu',528:'eu',578:'eu',616:'eu',620:'eu',642:'eu',674:'eu',688:'eu',703:'eu',
+  705:'eu',724:'eu',752:'eu',756:'eu',792:'eu',804:'eu',807:'eu',826:'eu',
+  643:'ru',
+  32:'sa',68:'sa',76:'sa',152:'sa',170:'sa',218:'sa',328:'sa',600:'sa',604:'sa',740:'sa',858:'sa',862:'sa',
+  12:'af',24:'af',72:'af',108:'af',120:'af',140:'af',148:'af',174:'af',178:'af',180:'af',204:'af',231:'af',232:'af',262:'af',266:'af',270:'af',288:'af',324:'af',384:'af',404:'af',426:'af',430:'af',434:'af',450:'af',454:'af',466:'af',478:'af',480:'af',504:'af',508:'af',516:'af',562:'af',566:'af',646:'af',678:'af',686:'af',694:'af',706:'af',710:'af',716:'af',728:'af',729:'af',748:'af',788:'af',800:'af',818:'af',834:'af',854:'af',894:'af',
+  4:'as',50:'as',64:'as',96:'as',104:'as',116:'as',144:'as',156:'as',356:'as',360:'as',364:'as',368:'as',376:'as',392:'as',398:'as',400:'as',408:'as',410:'as',418:'as',422:'as',458:'as',462:'as',512:'as',524:'as',586:'as',608:'as',634:'as',682:'as',702:'as',704:'as',760:'as',762:'as',764:'as',887:'as',
+  84:'na',124:'na',188:'na',214:'na',320:'na',332:'na',340:'na',484:'na',558:'na',591:'na',780:'na',840:'na',
+  36:'oc',90:'oc',242:'oc',296:'oc',540:'oc',548:'oc',554:'oc',583:'oc',584:'oc',598:'oc',776:'oc',882:'oc',
+};
+const CC_CONT={TR:'eu',BA:'eu',DE:'eu',ES:'eu',IT:'eu',FR:'eu',PL:'eu',RO:'eu',HU:'eu',GB:'eu',AT:'eu',BE:'eu',NL:'eu',SE:'eu',NO:'eu',DK:'eu',FI:'eu',CH:'eu',PT:'eu',GR:'eu',CZ:'eu',SK:'eu',SI:'eu',HR:'eu',RS:'eu',BG:'eu',UA:'eu',RU:'ru',AR:'sa',BR:'sa',UY:'sa',CL:'sa',CO:'sa',ZA:'af',NG:'af',KE:'af',ET:'af',EG:'af',IN:'as',PK:'as',BD:'as',US:'na',CA:'na',MX:'na',AU:'oc',NZ:'oc'};
+const CM={
+  TR:{n:"Turkish Hide",r:"European Hide",d:"European-grade bovine hide with clean grain surface — no brand marks, no hump. Every Turkish hide is slaughterhouse-traceable with veterinary inspection stamps and signed certificates. Turkish cattle are raised under EU-aligned agricultural standards, producing consistent, high-quality hides widely used by premium European leather goods brands."},
+  BA:{n:"Bosnian Hide",r:"European Hide",d:"European-grade bovine hide. Clean grain with no brand marks or hump. Bosnian hides are known for tight, uniform grain structure and consistent thickness — a reliable source for fine leather goods production."},
+  DE:{n:"German Hide",r:"European Hide",d:"Premium European bovine hide. Clean grain, no brand marks, no hump. Raised under strict EU agricultural and animal welfare regulations. German hides are among the most consistent in thickness and grain quality in Europe."},
+  ES:{n:"Spanish Hide",r:"European Hide",d:"European-grade bovine hide. Clean grain, no brand marks, no hump. Raised under EU agricultural regulations with full traceability from farm to tannery."},
+  IT:{n:"Italian Hide",r:"European Hide",d:"European-grade bovine hide. Clean grain, no brand marks, no hump. Italian hides benefit from strict EU animal welfare standards and are traditionally associated with premium leather production."},
+  FR:{n:"French Hide",r:"European Hide",d:"European-grade bovine hide. Clean grain, no brand marks, no hump. French cattle are raised under strict EU regulations with full veterinary traceability throughout the supply chain."},
+  PL:{n:"Polish Hide",r:"European Hide",d:"European-grade bovine hide. Clean grain, no brand marks, no hump. Raised under EU agricultural standards with consistent quality and competitive pricing within the European market."},
+  RO:{n:"Romanian Hide",r:"European Hide",d:"European-grade bovine hide. Clean grain, no brand marks, no hump. Raised under EU agricultural regulations with full farm-to-tannery traceability."},
+  HU:{n:"Hungarian Hide",r:"European Hide",d:"European-grade bovine hide. Clean grain, no brand marks, no hump. Hungarian hides offer good thickness consistency and are raised under EU animal welfare standards."},
+  GB:{n:"British Hide",r:"European Hide",d:"Premium European-grade bovine hide. Clean grain, no brand marks, no hump. British hides are known for excellent grain quality due to temperate climate and high farming standards."},
+  AT:{n:"Austrian Hide",r:"European Hide",d:"European-grade bovine hide. Clean grain, no brand marks, no hump. Raised under strict EU and Austrian agricultural standards with full traceability."},
+  RS:{n:"Serbian Hide",r:"European Hide",d:"European-grade bovine hide. Clean grain with no brand marks. Serbian hides offer good quality at competitive pricing within the European hide market."},
+  UA:{n:"Ukrainian Hide",r:"European Hide",d:"European-origin bovine hide. Generally clean grain with minimal marking. Quality can vary by region — hides are selected and graded at intake to ensure consistency."},
+  RU:{n:"Russian Hide",r:"Russian Hide",d:"Large bovine hides with generally clean grain. Quality varies by region. Selected and graded at intake to meet production specifications."},
+  AR:{n:"Argentine Hide",r:"South American Hide",d:"Large South American bovine hide. Typically carries 1–2 brand marks (fire-branded for ranch identification — industry standard in Argentine cattle farming) and occasional hump presence. Brand marks are factored into cutting yield calculations. Argentine hides offer generous surface area and are widely used in volume production."},
+  BR:{n:"Brazilian Hide",r:"South American Hide",d:"South American bovine hide from the world's largest cattle population. Commonly carries 1–3 brand marks and hump presence. Brand mark density varies by region — southern Brazilian hides tend to have fewer marks. Hides offer large surface area suitable for high-volume production with adjusted cutting yields."},
+  UY:{n:"Uruguayan Hide",r:"South American Hide",d:"Among the cleanest South American hides. Fewer brand marks than Argentine or Brazilian origin due to ear-tag identification practices. Moderate hump presence. Uruguayan hides are well-regarded for relatively clean grain within the South American market."},
+  ZA:{n:"South African Hide",r:"African Hide",d:"The highest quality African-origin bovine hide. Generally clean grain but may carry tick bite scarring depending on region. No brand marks. Quality is above average for the continent, approaching European standards in well-managed herds."},
+  NG:{n:"Nigerian Hide",r:"African Hide",d:"African bovine hide. Smaller in size compared to European or South American origin. May carry tick damage, scratch marks, and surface imperfections. Typically used for lower-grade applications. Hides are carefully selected and graded at intake."},
+  ET:{n:"Ethiopian Hide",r:"African Hide",d:"African bovine hide. Smaller and thinner than European origin. Common surface issues include tick damage and flay marks. Ethiopian hides require careful selection — top grades can be suitable for leather goods when properly processed."},
+  IN:{n:"Indian Hide",r:"Asian Hide",d:"Asian bovine hide, typically from buffalo or cattle. Quality varies significantly by source region. May carry tick marks and surface imperfections. Indian hides are graded carefully at intake and selected for appropriate end-use applications."},
+  PK:{n:"Pakistani Hide",r:"Asian Hide",d:"Asian bovine hide, commonly buffalo origin. Variable quality with potential surface imperfections. Carefully graded and selected at intake to match production requirements."},
+  US:{n:"American Hide",r:"North American Hide",d:"Premium bovine hide with very clean grain surface. No brand marks in most US cattle operations (ear-tag identification). No hump in standard beef breeds. American hides are among the cleanest and most consistent globally, with full USDA-regulated traceability."},
+  CA:{n:"Canadian Hide",r:"North American Hide",d:"Premium bovine hide with clean grain surface. No brand marks, no hump. Canadian hides benefit from strict agricultural standards and cold climate conditions that minimize insect damage — producing exceptionally clean, consistent hides."},
+  AU:{n:"Australian Hide",r:"Oceanian Hide",d:"Among the cleanest hides in the world. No brand marks, no hump, minimal tick damage due to strict pest management. Australian hides are premium-grade with excellent grain quality, full government-regulated traceability, and consistent thickness."}
+};
+const RS_STYLE={eu:{rc:"#EAF3DE",rt:"#27500A",lc:"#3B6D11",mc:"#1D9E75"},ru:{rc:"#EEEDFE",rt:"#3C3489",lc:"#534AB7",mc:"#7F77DD"},sa:{rc:"#E1F5EE",rt:"#085041",lc:"#0F6E56",mc:"#1D9E75"},af:{rc:"#FAEEDA",rt:"#633806",lc:"#854F0B",mc:"#EF9F27"},as:{rc:"#FCEBEB",rt:"#791F1F",lc:"#A32D2D",mc:"#E24B4A"},na:{rc:"#E6F1FB",rt:"#0C447C",lc:"#185FA5",mc:"#378ADD"},oc:{rc:"#FBEAF0",rt:"#72243E",lc:"#993556",mc:"#D4537E"}};
+const CONT_LBL={eu:"Europe & Turkey",ru:"Russia",sa:"South America",af:"Africa",as:"Asia",na:"North America",oc:"Oceania"};
+const MENSE_MAP={"konya":"TR","merzifon":"TR","balıkesir":"TR","istanbul":"TR","ankara":"TR","bursa":"TR","izmir":"TR","erzurum":"TR","kars":"TR","sivas":"TR","turkey":"TR","türkiye":"TR","bosna":"BA","bosnia":"BA","banja luka":"BA","sarajevo":"BA","arjantin":"AR","argentina":"AR","brezilya":"BR","brazil":"BR","güney afrika":"ZA","south africa":"ZA","cape town":"ZA","almanya":"DE","germany":"DE","fransa":"FR","france":"FR","italya":"IT","italy":"IT","ispanya":"ES","spain":"ES","polonya":"PL","poland":"PL","romanya":"RO","romania":"RO","macaristan":"HU","hungary":"HU","rusya":"RU","russia":"RU","hindistan":"IN","india":"IN","abd":"US","usa":"US","kanada":"CA","canada":"CA","avustralya":"AU","australia":"AU","pakistan":"PK","sırbistan":"RS","serbia":"RS","ukrayna":"UA","ukraine":"UA"};
+const COLOR_HEX={cognac:'#8B4513',black:'#1A1A1A','dark brown':'#3B1A08',navy:'#1B2A4A',natural:'#C9A87C',burgundy:'#6D1A2A',tan:'#D2B48C',brown:'#7B3F00',white:'#F5F5F0',grey:'#888780',gray:'#888780',red:'#8B0000',green:'#2D5A27',blue:'#1B3A6B',kahverengi:'#7B3F00',siyah:'#1A1A1A',bej:'#D2B48C',lacivert:'#1B2A4A',bordo:'#6D1A2A',krem:'#FFFDD0',boyasız:'#C9A87C',naturel:'#C9A87C',beyaz:'#F5F5F0'};
+
+function parseCountry(m){if(!m)return null;const s=m.trim();const dash=s.match(/^([A-Z]{2})-/i);if(dash)return dash[1].toUpperCase();if(/^[A-Z]{2}$/.test(s))return s;const low=s.toLowerCase();for(const[k,v]of Object.entries(MENSE_MAP)){if(low.includes(k))return v;}return null;}
+function fmtDate(s){if(!s)return'—';try{const str=String(s);if(str.includes('T')){const d=new Date(str);return String(d.getUTCDate()).padStart(2,'0')+'.'+String(d.getUTCMonth()+1).padStart(2,'0')+'.'+d.getUTCFullYear();}const p=str.split('-');if(p.length>=3)return p[2].substring(0,2)+'.'+p[1]+'.'+p[0];}catch(e){}return s;}
+
+// ── BUILD PASSPORT ──
+function buildPage(el,d){
+  const mense=d.sepiMense||'';
+  const cc=parseCountry(mense);
+  const cm=cc?CM[cc]:null;
+  const cont=cc?CC_CONT[cc]:'eu';
+  const rs=RS_STYLE[cont]||RS_STYLE.eu;
+  const regionLabel=cm?cm.r:'Hide Origin';
+  const countryLabel=cm?cm.n:(mense||'—');
+  const renkHex=COLOR_HEX[(d.renk||'').toLowerCase()]||'#C9A87C';
+
+  el.innerHTML=`
+  <div class="passport-body">
+    <div class="ps">
+      <div class="ps-title">Lot Identity</div>
+      <table class="id-table">
+        <tr><td class="k">Lot code</td><td class="v">${d.isEmri||'—'}</td></tr>
+        <tr><td class="k">Article</td><td class="v">${d.urun||'—'}</td></tr>
+        <tr><td class="k">Customer</td><td class="v">${d.musteri||'—'}</td></tr>
+        <tr><td class="k">Color</td><td class="v"><span class="color-dot" style="background:${renkHex}"></span>${d.renk||'—'}</td></tr>
+        <tr><td class="k">Production date</td><td class="v">${fmtDate(d.tarih)}</td></tr>
+        <tr><td class="k">Thickness</td><td class="v">${d.kalinlik?d.kalinlik+' mm':'—'}</td></tr>
+        <tr><td class="k">Tanning method</td><td class="v">${(d.urun||'').toLowerCase().includes('full-veg')?'Full Vegetable Tanning (Chrome-free) · Full-grain bovine':'Chrome-tanned · Full-grain bovine'}</td></tr>
+      </table>
+    </div>
+    <div class="ps">
+      <div class="ps-title">Hide Origin</div>
+      <div class="origin-region" style="background:${rs.rc}">
+        <span class="ok" style="color:${rs.lc}">Region</span>
+        <span class="ov" style="color:${rs.rt}">${regionLabel}</span>
+      </div>
+      <div class="origin-country">
+        <span class="ok">Country</span>
+        <span class="ov">${countryLabel}</span>
+        <span class="code">${mense||'—'}</span>
+      </div>
+      ${cm&&cm.d?`<div class="origin-info"><strong>${countryLabel}:</strong> ${cm.d}</div>`:''}
+      <div class="map-box" id="map-wrap"></div>
+      <div class="map-caption">Highlighted — ${CONT_LBL[cont]||''}</div>
+    </div>
+    <div class="ps">
+      <div class="ps-title">Carbon Footprint</div>
+      <div class="carbon-score-row">
+        <div class="carbon-score-num">9.21</div>
+        <div>
+          <div class="carbon-score-unit">kg CO₂e / m²<br>cradle-to-gate · ISO 14067:2018</div>
+          <div class="carbon-score-badge">Excellent — top 10% globally</div>
+        </div>
+      </div>
+      <div id="bars"></div>
+      <div style="margin-top:.8rem;font-family:'DM Mono',monospace;font-size:11px;color:#7a6e65;line-height:1.6">
+        Facility intensity: <strong style="color:#1a1410">2.43 kg CO₂e/m²</strong> &nbsp;·&nbsp; LWG 2024 sector avg: 22.48 &nbsp;·&nbsp; Asen is <strong style="color:#27500A">59% below</strong> sector average
+      </div>
+      <div class="carbon-note">
+        <strong>How is this calculated?</strong><br>
+        Carbon footprint values are calculated annually based on the tannery's total energy consumption, water usage, 
+        chemical inputs, and upstream hide data from the preceding audit period — consistent with LWG Gold certification 
+        methodology. Current figures reflect the <strong>2024 reporting period</strong>. Values are updated following 
+        each annual LWG audit cycle, just as the Gold rating itself is based on retrospective performance data.
+      </div>
+    </div>
+    <div class="ps">
+      <div class="ps-title">Carbon Measurement Methodology</div>
+      <table class="meth-table">
+        <tr><td class="mk">Standard</td><td class="mv">ISO 14067:2018</td><td class="ms">Carbon Footprint of Products</td></tr>
+        <tr><td class="mk">Boundary</td><td class="mv">Cradle-to-Gate</td><td class="ms">Raw hide → factory exit</td></tr>
+        <tr><td class="mk">Framework</td><td class="mv">PEFCR Leather 2023</td><td class="ms">EU Product Env. Footprint</td></tr>
+        <tr><td class="mk">Functional unit</td><td class="mv">1 m² finished leather</td><td class="ms">—</td></tr>
+        <tr><td class="mk">Electricity</td><td class="mv">0.486 kg CO₂e / kWh</td><td class="ms">IEA 2023 Turkey grid</td></tr>
+        <tr><td class="mk">Natural gas</td><td class="mv">1.915 kg CO₂e / m³</td><td class="ms">IPCC AR6 × Sm³</td></tr>
+        <tr><td class="mk">Raw hide</td><td class="mv">6.78 kg CO₂e / m²</td><td class="ms">PEFCR Leather upstream</td></tr>
+        <tr><td class="mk">Scope coverage</td><td class="mv">Scope 1 + 2 + Upstream</td><td class="ms">GHG Protocol</td></tr>
+        <tr><td class="mk">Verification</td><td class="mv">LWG Gold annual audit</td><td class="ms">Leather Working Group</td></tr>
+      </table>
+    </div>
+    <div class="ps">
+      <div class="ps-title">Chemical Compliance</div>
+      <table class="chem-table">
+        <tr><td class="ck">ZDHC</td><td><div class="cv">Level 3 — MRSL compliant</div><div class="csub">All process chemicals registered in ZDHC Gateway. Highest compliance tier.</div></td></tr>
+        <tr><td class="ck">EU REACH</td><td><div class="cv">SVHC compliant</div><div class="csub">No substances of very high concern. Annex XVII restrictions observed.</div></td></tr>
+        <tr><td class="ck">Restricted</td><td><div class="cv">AZO-free · PFAS-free · Chrome VI free</div><div class="csub">Tested per EN ISO standards. Lab reports available on request.</div></td></tr>
+        <tr><td class="ck">Certifications</td><td>
+          <div style="margin-top:4px"><span class="chip chip-g">LWG Gold</span><span class="chip chip-b">ZDHC L3</span><span class="chip chip-g">REACH</span></div>
+          <div class="csub" style="margin-top:4px">Audited annually — records available on request</div>
+        </td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="passport-footer">
+    <p>ASEN PASSPORT · Asen Deri San. A.Ş. · Deri OSB Tuzla Istanbul Türkiye<br>
+    ISO 14067:2018 · PEFCR Leather 2023 · LWG Gold · ZDHC Level 3 · EU REACH Compliant</p>
+  </div>`;
+
+  buildBars(document.getElementById('bars'));
+  buildMap(document.getElementById('map-wrap'),cont,rs.mc);
+}
+
+function buildBars(el){
+  // Group 1: Facility-only comparison (max 15)
+  // Group 2: Cradle-to-gate full lifecycle (max 80)
+  const bars = [
+    {l:"Best facility globally",v:0.63,c:"#B8D4C8",fc:"#2D5A3A",max:15,
+     desc:"The lowest recorded tannery-only emission worldwide (Brazil, hydropower grid)."},
+    {l:"LWG best-practice avg.",v:2.50,c:"#B8D4C8",fc:"#2D5A3A",max:15,
+     desc:"Average of top-performing LWG-audited tanneries globally."},
+    {l:"Asen Tannery",v:2.43,c:"#1D7A4E",fc:"#fff",max:15,asen:true,
+     desc:"Our facility emissions — energy, water treatment, and process chemicals only."},
+    {l:"LWG 2024 sector avg.",v:22.48,c:"#E8A840",fc:"#5C3D0A",max:80,
+     desc:"The average cradle-to-gate footprint across all LWG-audited tanneries in 2024."},
+    {l:"Asen — cradle-to-gate",v:9.21,c:"#1D7A4E",fc:"#fff",max:80,asen:true,
+     desc:"Full lifecycle: upstream hide + our facility. 59% below the sector average."},
+    {l:"Industry upper range",v:73,c:"#D4625A",fc:"#fff",max:80,
+     desc:"Worst-performing tanneries — typically older facilities with no environmental investment."},
+  ];
+  bars.forEach(b=>{
+    const pct=(b.v/b.max*100).toFixed(1);
+    const row=document.createElement('div');row.className='bar-row-wrap';
+    row.innerHTML=`
+      <div class="bar-row">
+        <div class="bar-lbl">${b.l}${b.asen?' ●':''}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${b.c}"><span style="color:${b.fc}">${b.v.toFixed(2)} kg</span></div></div>
+      </div>
+      <div class="bar-desc">${b.desc}</div>`;
+    el.appendChild(row);
+  });
+}
+
+function buildMap(wrap,activeCont,mapCol){
+  const VW=960, VH=420, VY=40;
+  const svg=d3.select(wrap).append('svg')
+    .attr('viewBox',`0 ${VY} ${VW} ${VH}`)
+    .attr('preserveAspectRatio','xMidYMid meet')
+    .style('width','100%').style('height','auto').style('display','block');
+  const proj=d3.geoNaturalEarth1().scale(153).translate([VW/2, 250]);
+  const path=d3.geoPath(proj);
+  d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(world=>{
+    svg.selectAll('path')
+      .data(topojson.feature(world,world.objects.countries).features)
+      .join('path')
+      .attr('d',path)
+      .attr('fill',d=>CONT_MAP[d.id]===activeCont?mapCol:'#E0D8D0')
+      .attr('stroke','#fff')
+      .attr('stroke-width',.5);
+  }).catch(()=>{});
+}
+</script>
+</body>
+</html>
